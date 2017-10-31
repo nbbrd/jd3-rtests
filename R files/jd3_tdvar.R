@@ -20,6 +20,19 @@ setMethod("coef", "JD3_TimeVaryingAirline", function(object){
   proc_vector(object@internal, "arima.rparameters")}
 })
 
+setMethod("show", "JD3_TimeVaryingAirline", function(object){
+  if (is.jnull(object@internal)){
+    cat("Invalid estimation")
+  }else{
+    cat("Arima model", "\n")
+    p=proc_vector(object@internal, "arima.parameters")
+    cat("Coefficients: ", format(round(p, 5), scientific = FALSE), "\n")
+    ll<-proc_numeric(object@internal,"likelihood.ll")
+    cat("Log likelihood = ", format(round(ll, 4), scientific = FALSE), "\n")
+  }
+})
+
+
 jd3_tdvar<-function(s, td="TD7", var="Default"){
   
   jd_s=ts_r2jd(s)

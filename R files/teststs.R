@@ -4,7 +4,7 @@ source("./R files/jd3_sts.R")
 load("./Data/retail.rda")
 load("./Data/ABS.rda")
 
-jd3_sts(retail$NewCarDealers )
+jd3_sts(retail$NewCarDealers)
 jd3_sts(retail$BeerWineAndLiquorStores)
 
 # Start the clock!
