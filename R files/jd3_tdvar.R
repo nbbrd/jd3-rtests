@@ -17,7 +17,7 @@ setMethod("coef", "JD3_TimeVaryingAirline", function(object){
   if (is.null(object@internal)){
     NULL
   }else{
-  proc_vector(object@internal, "arima.rparameters")}
+  proc_vector(object@internal, "arima.parameters")}
 })
 
 setMethod("show", "JD3_TimeVaryingAirline", function(object){
@@ -25,7 +25,7 @@ setMethod("show", "JD3_TimeVaryingAirline", function(object){
     cat("Invalid estimation")
   }else{
     cat("Arima model", "\n")
-    p=proc_vector(object@internal, "arima.parameters")
+    p<-proc_vector(object@internal, "arima.parameters")
     cat("Coefficients: ", format(round(p, 5), scientific = FALSE), "\n")
     ll<-proc_numeric(object@internal,"likelihood.ll")
     cat("Log likelihood = ", format(round(ll, 4), scientific = FALSE), "\n")
@@ -33,12 +33,12 @@ setMethod("show", "JD3_TimeVaryingAirline", function(object){
 })
 
 
-jd3_tdvar<-function(s, td="TD7", var="Default"){
+jd3_tdvar<-function(s, td="TD7", var="Default", fixedThreshold=1e-7){
   
-  jd_s=ts_r2jd(s)
-  jrslt=.jcall("demetra/r/TimeVaryingRegression", 
+  jd_s<-ts_r2jd(s)
+  jrslt<-.jcall("demetra/r/TimeVaryingRegression", 
                "Ldemetra/r/TimeVaryingRegression$Results;", 
-               "regarima", jd_s, td, var)
+               "regarima", jd_s, td, var, fixedThreshold)
   new (Class = "JD3_TimeVaryingAirline", internal = jrslt)
   
 }
