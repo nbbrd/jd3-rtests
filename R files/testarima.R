@@ -94,3 +94,4 @@ logLik( jd3_arima(a , order=c(0,1,1), seasonal=c(0,1,1) ))
 coef( jd3_arima(a , order=c(3,1,1), seasonal=c(1,1,0) ))
 logLik( arima(a , order=c(0,1,1), seasonal=c(0,1,1), kappa=1e9, optim.control = list(reltol=1e-12) ))
 coef( arima(a , order=c(3,1,1), seasonal=c(1,1,0), kappa=1e9, optim.control = list(reltol=1e-12) ))
+
