@@ -34,3 +34,12 @@ jd3_stl<-function(y, period, multiplicative=TRUE, swindow=7, robust=TRUE){
   jrslt<-.jcall("demetra/r/StlDecomposition", "Ldemetra/r/StlDecomposition$Results;", "process", as.numeric(y), as.integer(period), multiplicative, as.integer(swindow), robust)
   new (Class = "JD3_STL", internal = jrslt)
 }
+
+jd3_loess<-function(y, window, degree=1, jump=1){
+  if (degree != 0 && degree != 1)
+    stop("Unsupported degree")
+  if (jump <1)
+    stop("jump should be greater then 0")
+  return (.jcall("demetra/r/StlDecomposition", "[D", "loess", as.numeric(y), as.integer(window), as.integer(degree), as.integer(jump)))
+}
+

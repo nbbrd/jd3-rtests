@@ -31,3 +31,4 @@ message("R BSM")
 proc.time() - ptm
 
 plot(saDecomposition(jd3_sts(ABS$X0.2.20.10.M)))
+

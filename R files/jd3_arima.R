@@ -1,5 +1,6 @@
 source("./R files/jd3_init.R")
 source("./R files/jd3_procresults.R")
+source("./R files/jd3_arimapredict.R")
 
 setClass(
   Class="JD3_Arima",
@@ -12,6 +13,19 @@ setMethod("coef", "JD3_Arima", function(object){
     NULL
   }else{
   proc_vector(object@internal, "arima.parameters")
+  }
+})
+
+setMethod("predict", "JD3_Arima", function(object, nforecasts=0, nbackcasts=0, method=c("all", "exact", "fast")){
+  
+  if (is.null(object@internal)){
+    return (NULL)
+  }else{
+    method=match.arg(method)
+    mean<-proc_numeric(object@internal, "mean")
+    jregarima<-.jcall(object@internal, "Ldemetra/arima/regarima/RegArimaModel;", "getRegarima")
+    jrslt<-.jcall("demetra/r/ArimaForecasts", "Ldemetra/r/ArimaForecasts$Results;", "process", jregarima, mean, as.integer(nforecasts), as.integer(nbackcasts), method)
+    return (new (Class = "JD3_ArimaPredict", internal = jrslt))
   }
 })
 
@@ -66,6 +80,8 @@ jd3_arima<-function(y, order=c(0L,1L,1L), seasonal=c(0L,1L,1L), xreg=NULL, mean=
   if (freq > 1){
   .jcall(jarima, "V", "setSeasonalOrder", as.integer(seasonal))
   }
+  if (mean)
+    .jcall(jarima, "V", "setMean", TRUE);
   .jcall(jarima, "V", "setY", as.double(y))
   
   jrslt<-.jcall(jarima, "Ldemetra/r/ArimaEstimation$Results;", "process")

@@ -16,6 +16,14 @@ setMethod("show", "JD3_X11", function(object){
   }
 })
 
+setMethod("predict", "JD3_X11", function(object){
+  if (is.jnull(object@internal)){
+    cat("Invalid estimation")
+  }else{
+    cat("X11", "\n")
+  }
+})
+
 setMethod("saDecomposition", "JD3_X11", function(object){
   if (is.jnull(object@internal)){
     return (NULL)
@@ -33,4 +41,12 @@ setMethod("saDecomposition", "JD3_X11", function(object){
 jd3_x11<-function(y, period, multiplicative=TRUE, henderson=13, seas0="S3X3", seas1="S3X5"){
   jrslt<-.jcall("demetra/r/X11Decomposition", "Ldemetra/r/X11Decomposition$Results;", "process", as.numeric(y), period, multiplicative, as.integer(henderson), seas0, seas1)
   new (Class = "JD3_X11", internal = jrslt)
+}
+
+jd3_henderson<-function(y, length, musgrave=TRUE, ic=4.5){
+  return (.jcall("demetra/r/X11Decomposition", "[D", "henderson", as.numeric(y), as.integer(length), musgrave, ic))
+}
+
+jd3_icratios<-function(y, t, nlags, multiplicative=TRUE){
+  return (.jcall("demetra/r/X11Decomposition", "[D", "icratios", as.numeric(y), as.numeric(t), as.integer(nlags), multiplicative))
 }

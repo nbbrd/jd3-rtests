@@ -52,3 +52,4 @@ jd3_tdvar<-function(s, td="TD7", var="Default", aicdiff=0){
 }
 
 
+
