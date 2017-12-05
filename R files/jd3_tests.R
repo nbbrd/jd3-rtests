@@ -1,5 +1,6 @@
 source("./R files/jd3_init.R")
 source("./R files/jd3_rslts.R")
+source("./R files/jd3_airlinedecomposition.R")
 
 load("./Data/retail.rda")
 load("./Data/ABS.rda")
@@ -47,4 +48,11 @@ jd3_td_FTest<-function(series, ar=TRUE, nyears=0){
     attr(all, "description")<-desc
     return (all)
   }
+}
+
+test_td<-function(series, td="TD7", var="Default", n){
+  t<-result(jd3_tdvar(series, td, var), "tdeffect")
+  decomp<-jd3_airlineDecomposition(series-t)
+  show(jd3_td_FTest(result(decomp, "i"), nyears=n))
+  show(jd3_td_FTest(result(decomp, "sa"), nyears=n))
 }

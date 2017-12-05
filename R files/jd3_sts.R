@@ -51,11 +51,12 @@ setMethod("saDecomposition", "JD3_Sts", function(object){
 
 
 
-jd3_sts<-function(y, level=1, slope=1, cycle=-1, noise=1, seasonal="Trigonometric"){
+jd3_sts<-function(y, level=1, slope=1, cycle=-1, noise=1
+                  , seasonal=c("Trigonometric", "Dummy", "Crude", "HarrisonStevens", "Fixed", "Unused")){
   if (!is.ts(y)){
     stop("y must be a time series")
   }
-  
+  seasonal<-match.arg(seasonal)
   jsts=.jcall("demetra/r/StsEstimation", "Ldemetra/r/StsEstimation$Results;", "process", ts_r2jd(y), as.integer(level), as.integer(slope), as.integer(cycle), as.integer(noise), seasonal)
   new (Class = "JD3_Sts", internal = jsts)
 }

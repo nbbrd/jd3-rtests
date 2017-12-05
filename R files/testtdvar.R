@@ -3,13 +3,14 @@ source("./R files/jd3_tdvar.R")
 
 load("./Data/ABS.rda")
 
-tdvar_all<-function(s, log=TRUE, td="TD7", var="Default"){
+load("./Data/ABS.rda")
+
+tdvar_all<-function(s, log=TRUE, td="TD7", var="Default",aicdiff=0){
   if (log){
     s<-log(s)
   }
-  x<-jd3_tdvar(s, td, var)
-  cat(coef(x), "\n")
-  cat(logLik(x), "\n")
+  x<-jd3_tdvar(s, td, var, aicdiff)
+  show(x)
   c<-result(x, "coefficients.value")
   ec<-result(x, "coefficients.stde")
   w<-c[,dim(c)[2]]
@@ -28,5 +29,4 @@ tdvar_all<-function(s, log=TRUE, td="TD7", var="Default"){
 
 tdvar_all(ABS$X0.2.20.10.M)
 tdvar_all(ABS$X0.2.20.10.M, var="Contrasts")
-
 
