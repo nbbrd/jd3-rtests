@@ -30,8 +30,8 @@ setMethod("saDecomposition", "JD3_STL", function(object){
 })
 
 
-jd3_stl<-function(y, period, multiplicative=TRUE, swindow=7, robust=TRUE){
-  jrslt<-.jcall("demetra/r/StlDecomposition", "Ldemetra/r/StlDecomposition$Results;", "process", as.numeric(y), as.integer(period), multiplicative, as.integer(swindow), robust)
+jd3_stl<-function(y, period, multiplicative=TRUE, swindow=7, twindow=0, robust=TRUE){
+  jrslt<-.jcall("demetra/r/StlDecomposition", "Ldemetra/r/StlDecomposition$Results;", "process", as.numeric(y), as.integer(period), multiplicative, as.integer(swindow), as.integer(twindow), robust)
   new (Class = "JD3_STL", internal = jrslt)
 }
 
