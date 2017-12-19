@@ -55,3 +55,7 @@ jd3_henderson<-function(y, length, musgrave=TRUE, ic=4.5){
 jd3_icratios<-function(y, t, nlags, multiplicative=TRUE){
   return (.jcall("demetra/r/X11Decomposition", "[D", "icratios", as.numeric(y), as.numeric(t), as.integer(nlags), multiplicative))
 }
+
+jd3_localpolynomials<-function(y, horizon, degree=3, kernel="Henderson", endpoints="DAF"){
+  return (.jcall("demetra/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints))
+}
