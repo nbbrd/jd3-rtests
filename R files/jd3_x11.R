@@ -56,6 +56,10 @@ jd3_icratios<-function(y, t, nlags, multiplicative=TRUE){
   return (.jcall("demetra/r/X11Decomposition", "[D", "icratios", as.numeric(y), as.numeric(t), as.integer(nlags), multiplicative))
 }
 
-jd3_localpolynomials<-function(y, horizon, degree=3, kernel="Henderson", endpoints="DAF"){
-  return (.jcall("demetra/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints))
+# See Proietti-Luati [2008] (Real time estimation in local polynomial regression...) for the terminology
+jd3_localpolynomials<-function(y, horizon, degree=3, kernel=c("Henderson", "Uniform", "Biweight", "Triweight", "Tricube", "Gaussian", "Triangular", "Parabolic"), endpoints=c("DAF", "LC", "QL", "CQ"), ic=4.5){
+  d<-2/(sqrt(pi)*ic)
+  kernel=match.arg(kernel)
+  endpoints=match.arg(endpoints)
+  return (.jcall("demetra/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints, d))
 }
