@@ -6,7 +6,7 @@ ts_r2jd<-function(s){
   }
   freq<-frequency(s)
   start<-start(s)
-  .jcall("demetra/r/TsUtility", "Ldemetra/timeseries/simplets/TsData;", "of", 
+  .jcall("demetra/r/TsUtility", "Ldemetra/timeseries/TsData;", "of", 
          as.integer(freq), as.integer(start[1]), as.integer(start[2]), as.double(s))
   }
 
@@ -15,7 +15,7 @@ ts_jd2r<-function(s){
     return (NULL)
   }
   pstart<-.jcall("demetra/r/TsUtility", "[I", "startPeriod", s)
-  jx<-.jcall(s, "Ldemetra/data/DoubleSequence;", "values")
+  jx<-.jcall(s, "Ldemetra/data/DoubleSequence;", "getValues")
   x<-.jcall(jx, "[D", "toArray")
   ts(x,start=pstart[2:3], frequency=pstart[1])
 }
@@ -43,7 +43,7 @@ jd3_aggregate<-function(s, nfreq=1, conversion="Sum", complete=TRUE){
     return (NULL)
   }
   jd_s<-ts_r2jd(s)
-  jd_agg<-.jcall("demetra/r/TsUtility", "Ldemetra/timeseries/simplets/TsData;", "aggregate", jd_s, 
+  jd_agg<-.jcall("demetra/r/TsUtility", "Ldemetra/timeseries/TsData;", "aggregate", jd_s, 
                as.integer(nfreq), conversion, complete); 
   if (is.null(jd_agg)){
     return (NULL);

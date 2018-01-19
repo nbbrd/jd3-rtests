@@ -34,8 +34,8 @@ proc_ts<-function(rslt, name){
   s<-.jcall(rslt, "Ljava/lang/Object;", "getData", name, jd_clobj)
   if (is.jnull(s))
     return (NULL)
-  if (.jinstanceof(s, "demetra/timeseries/simplets/TsData"))
-    return(ts_jd2r(.jcast(s,"demetra/timeseries/simplets/TsData")))
+  if (.jinstanceof(s, "demetra/timeseries/TsData"))
+    return(ts_jd2r(.jcast(s,"demetra/timeseries/TsData")))
   else
     return (NULL)
 }
@@ -119,8 +119,8 @@ proc_data<-function(rslt, name){
   s<-.jcall(rslt, "Ljava/lang/Object;", "getData", name, jd_clobj)
   if (is.jnull(s))
     return (NULL)
-  if (.jinstanceof(s, "demetra/timeseries/simplets/TsData"))
-    return(ts_jd2r(.jcast(s,"demetra/timeseries/simplets/TsData")))
+  if (.jinstanceof(s, "demetra/timeseries/TsData"))
+    return(ts_jd2r(.jcast(s,"demetra/timeseries/TsData")))
   else if (.jinstanceof(s, "demetra/maths/MatrixType"))
     return(matrix_jd2r(.jcast(s,"demetra/maths/MatrixType")))
   else
