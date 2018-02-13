@@ -121,12 +121,27 @@ proc_data<-function(rslt, name){
     return (NULL)
   if (.jinstanceof(s, "demetra/timeseries/TsData"))
     return(ts_jd2r(.jcast(s,"demetra/timeseries/TsData")))
-  else if (.jinstanceof(s, "demetra/maths/MatrixType"))
-    return(matrix_jd2r(.jcast(s,"demetra/maths/MatrixType")))
-  else if (.jcall(.jcall(s, "Ljava/lang/Class;", "getClass"), "Z", "isArray"))
-    return (.jevalArray(s, silent=TRUE))
   else if (.jinstanceof(s, "java/lang/Number"))
     return (.jcall(s, "D", "doubleValue"))
+  else if (.jinstanceof(s, "demetra/maths/MatrixType"))
+    return(matrix_jd2r(.jcast(s,"demetra/maths/MatrixType")))
+  else if (.jinstanceof(s, "demetra/data/Parameter")){
+    val<-.jcall(s, "D", "getValue")
+    e<-.jcall(s, "D", "getStde")
+    return (c(val, e))
+  }
+  else if (.jinstanceof(s, "[Ldemetra/data/Parameter;")){
+    p<-.jcastToArray(s)
+    len<-length(p)
+    all<-array(0, dim=c(len,2))
+    for (i in 1:len){
+      all[i, 1]<-.jcall(p[[i]], "D", "getValue")
+      all[i, 2]<-.jcall(p[[i]], "D", "getStde")
+    }
+    return (all)
+  }
+  else if (.jcall(.jcall(s, "Ljava/lang/Class;", "getClass"), "Z", "isArray"))
+    return (.jevalArray(s, silent=TRUE))
   else
     return (.jcall(s, "S", "toString"))
 }
@@ -144,4 +159,3 @@ proc_dictionary<-function(name){
   }
   return (keys)
 }
-
