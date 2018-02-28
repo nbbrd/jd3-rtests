@@ -67,10 +67,3 @@ jd3_localpolynomials<-function(y, horizon, degree=3, kernel=c("Henderson", "Unif
   return (.jcall("demetra/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints, d))
 }
 
-jd3_lp_properties<-function(horizon, degree=3, kernel=c("Henderson", "Uniform", "Biweight", "Triweight", "Tricube", "Gaussian", "Triangular", "Parabolic"), endpoints=c("DAF", "CC", "LC", "QL", "CQ"), ic=4.5){
-  d<-2/(sqrt(pi)*ic)
-  kernel=match.arg(kernel)
-  endpoints=match.arg(endpoints)
-  return (.jcall("demetra/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints, d))
-}
-
