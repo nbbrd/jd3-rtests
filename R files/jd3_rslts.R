@@ -123,8 +123,12 @@ proc_data<-function(rslt, name){
     return(ts_jd2r(.jcast(s,"demetra/timeseries/TsData")))
   else if (.jinstanceof(s, "demetra/maths/MatrixType"))
     return(matrix_jd2r(.jcast(s,"demetra/maths/MatrixType")))
-  else
+  else if (.jcall(.jcall(s, "Ljava/lang/Class;", "getClass"), "Z", "isArray"))
     return (.jevalArray(s, silent=TRUE))
+  else if (.jinstanceof(s, "java/lang/Number"))
+    return (.jcall(s, "D", "doubleValue"))
+  else
+    return (.jcall(s, "S", "toString"))
 }
 
 proc_dictionary<-function(name){

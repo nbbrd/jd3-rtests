@@ -50,6 +50,11 @@ jd3_td_FTest<-function(series, ar=TRUE, nyears=0){
   }
 }
 
+jd3_ch<-function(series, startPeriodicity=2, endPeriodicity, original=TRUE){
+  q<-.jcall("demetra/r/SeasonalityTests", "[D", "canovaHansenTest", as.numeric(series), as.integer(startPeriodicity), as.integer(endPeriodicity), original)  
+  return(q)
+}
+
 test_td<-function(series, td="TD7", var="Default", n){
   t<-result(jd3_tdvar(series, td, var), "tdeffect")
   decomp<-jd3_airlineDecomposition(series-t)

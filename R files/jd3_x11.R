@@ -38,13 +38,16 @@ setMethod("saDecomposition", "JD3_X11", function(object){
 })
 
 
-jd3_x11<-function(y, period, multiplicative=TRUE, henderson=13, 
+jd3_x11<-function(y, period, multiplicative=TRUE, trendLength=13, trendDegree=3,
+                  trendKernel="Henderson", leftAsymmetric="LC", rightAsymmetric="LC",
                   seas0=c("S3X3", "S3X1", "S3X5", "S3X9", "S3X15"),
                   seas1=c("S3X3", "S3X1", "S3X5", "S3X9", "S3X15"), 
                   lsigma=1.5, usigma=2.5){
   seas0=match.arg(seas0)
   seas1=match.arg(seas1)
-  jrslt<-.jcall("demetra/r/X11Decomposition", "Ldemetra/r/X11Decomposition$Results;", "process", as.numeric(y), period, multiplicative, as.integer(henderson), seas0, seas1, lsigma, usigma)
+  jrslt<-.jcall("demetra/r/X11Decomposition", "Ldemetra/r/X11Decomposition$Results;", "process", as.numeric(y), period, multiplicative
+                , as.integer(trendLength), as.integer(trendDegree),
+                trendKernel, leftAsymmetric, rightAsymmetric, seas0, seas1, lsigma, usigma)
   new (Class = "JD3_X11", internal = jrslt)
 }
 
@@ -63,3 +66,4 @@ jd3_localpolynomials<-function(y, horizon, degree=3, kernel=c("Henderson", "Unif
   endpoints=match.arg(endpoints)
   return (.jcall("demetra/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints, d))
 }
+
