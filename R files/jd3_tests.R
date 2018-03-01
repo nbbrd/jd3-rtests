@@ -5,9 +5,12 @@ source("./R files/jd3_airlinedecomposition.R")
 load("./Data/retail.rda")
 load("./Data/ABS.rda")
 
-jd3_seasonality_FTest<-function(series, ar=TRUE, nyears=0){
-  js<-ts_r2jd(series)
-  jtest<-.jcall("demetra/r/SeasonalityTests", "Ldemetra/stats/TestResult;", "ftest", js, ar, as.integer(nyears))
+jd3_seasonality_FTest<-function(series, period = 0, ar=TRUE, nyears=0){
+  p<-period
+  if (p == 0){
+    p<-frequency(series)
+  }
+  jtest<-.jcall("demetra/r/SeasonalityTests", "Ldemetra/stats/TestResult;", "fTest", as.numeric(series), as.integer(p), ar, as.integer(nyears))
   if (is.jnull(jtest))
     return (NULL)
   else{
@@ -20,9 +23,26 @@ jd3_seasonality_FTest<-function(series, ar=TRUE, nyears=0){
   }
 }
 
-jd3_seasonality_QSTest<-function(series, nyears=0){
-  js<-ts_r2jd(series)
-  jtest<-.jcall("demetra/r/SeasonalityTests", "Ldemetra/stats/TestResult;", "qstest", js, as.integer(nyears))
+jd3_seasonality_QSTest<-function(series, period = 0, nyears=0){
+  p<-period
+  if (p == 0){
+    p<-frequency(series)
+  }
+  jtest<-.jcall("demetra/r/SeasonalityTests", "Ldemetra/stats/TestResult;", "qsTest", as.numeric(series), as.integer(p), as.integer(nyears))
+  if (is.jnull(jtest))
+    return (NULL)
+  else{
+    desc<-.jcall(jtest, "S", "getDescription")
+    val<-.jcall(jtest, "D", "getValue")
+    pval<-.jcall(jtest, "D", "getPvalue")
+    all<-c(val, pval)
+    attr(all, "description")<-desc
+    return (all)
+  }
+}
+
+jd3_seasonality_periodcQSTest<-function(series, periods){
+  jtest<-.jcall("demetra/r/SeasonalityTests", "Ldemetra/stats/TestResult;", "periodicQsTest", as.numeric(series), as.numeric(periods))
   if (is.jnull(jtest))
     return (NULL)
   else{

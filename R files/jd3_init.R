@@ -9,6 +9,7 @@ library("rJava")
 .jaddClassPath("./Java/demetra-benchmarking-datatypes-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-modelling-datatypes-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-modelling-1.0.0-SNAPSHOT.jar")
+.jaddClassPath("./Java/demetra-sa-datatypes-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-sacore-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-r-1.0.0-SNAPSHOT.jar")
 
