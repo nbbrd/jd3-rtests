@@ -25,18 +25,20 @@ setMethod("show", "JD3_TimeVaryingAirline", function(object){
     cat("Invalid estimation")
   }else{
     cat("Model", "\n")
+    p0<-proc_vector(object@internal, "arima0.parameters")
     p<-proc_vector(object@internal, "arima.parameters")
     tdvar<-proc_numeric(object@internal,"tdvar")
-    cat("Arima coefficients: ", format(round(p, 5), scientific = FALSE), "\n")
-    cat("TD variance: ", format(round(tdvar, 9), scientific = FALSE), "\n")
     ll0<-proc_numeric(object@internal,"likelihood0.ll")
     aic0<-proc_numeric(object@internal,"aic0")
     cat("Log likelihood for model with fixed TD = ", format(round(ll0, 4), scientific = FALSE))
     cat(", AIC = ", format(round(aic0, 4), scientific = FALSE), "\n")
+    cat("Arima coefficients (fixed TD): ", format(round(p0, 5), scientific = FALSE), "\n")
     ll<-proc_numeric(object@internal,"likelihood.ll")
     aic<-proc_numeric(object@internal,"aic")
     cat("Log likelihood for model with time-varying TD= ", format(round(ll, 4), scientific = FALSE))
     cat(", AIC = ", format(round(aic, 4), scientific = FALSE), "\n")
+    cat("Arima coefficients: ", format(round(p, 5), scientific = FALSE), "\n")
+    cat("TD variance: ", format(round(tdvar, 9), scientific = FALSE), "\n")
   }
 })
 
