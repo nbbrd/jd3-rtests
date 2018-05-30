@@ -38,7 +38,7 @@ jd3_ssf_arma<-function(ar, ma, var=1){
 }
 
 jd3_ssf_sarima<-function(period, orders, seasonal, parameters){
-  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "sarima", as.integer(period), as.integer(orders), as.integer(seasonal), parameters)
+  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "sarima", as.integer(period), as.integer(orders), as.integer(seasonal), .jarray(parameters))
   new (Class = "JD3_Ssf", internal = jrslt)
 }
 
@@ -58,10 +58,23 @@ jd3_ssf_seasonal<-function(period, seasVariance, type="Crude"){
 }
 
 jd3_ssf_cycle<-function(dumpingFactor, cyclicalPeriod, cvar){
-  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "cyclet", dumpingFactor, cyclicalPeriod, cvar)
+  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "cycle", dumpingFactor, cyclicalPeriod, cvar)
   new (Class = "JD3_Ssf", internal = jrslt)
 }
 
 jd3_ssf_dk_concentratedlikelihood<-function(ssf, data){
   return(.jcall("rssf/Algorithms", "D", "concentratedLikelihood", ssf@internal, as.double(data)))
+}
+
+jd3_ssf_reg<-function(ssf, x, var=0, mvar=NULL){
+  
+  if (is.null(mvar)){
+    if (var == 0)
+      jssf<-.jcall("rssf/RegressionModels", "Ldemetra/ssf/univariate/ISsf;", "fixed", ssf@internal, matrix_r2jd(x))
+    else
+      jssf<-.jcall("rssf/RegressionModels", "Ldemetra/ssf/univariate/ISsf;", "timeVarying", ssf@internal, matrix_r2jd(x), var)
+  }else{
+    jssf<-.jcall("rssf/RegressionModels", "Ldemetra/ssf/univariate/ISsf;", "timeVarying", ssf@internal, matrix_r2jd(x), matrix_r2jd(mvar))
+  }
+  return (new (Class = "JD3_Ssf", internal = jssf))
 }
