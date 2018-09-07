@@ -3,6 +3,7 @@ if(!require(rJava)){
 }
 library("rJava")
 .jinit()
+.jaddClassPath("./Java/demetra-design-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-datatypes-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-core-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-benchmarking-1.0.0-SNAPSHOT.jar")

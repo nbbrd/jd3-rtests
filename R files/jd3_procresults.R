@@ -16,8 +16,13 @@ if (!isGeneric("dictionary")){
 }
 
 setClass(
-  Class="JD3_ProcResults",
+  Class="JD3_Object",
   representation = representation(internal = "jobjRef" )
+)
+
+setClass(
+  Class="JD3_ProcResults",
+  contains = "JD3_Object"
 )
 
 setMethod("dictionary", "JD3_ProcResults", function(object){

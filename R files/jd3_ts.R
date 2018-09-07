@@ -38,7 +38,7 @@ matrix_jd2r<-function(s){
 
 matrix_r2jd<-function(s){
   if (!is.matrix(s)){
-    return (NULL)
+    s<-matrix(s, nrow=length(s), ncol=1)
   }
   sdim<-dim(s)
   return (.jcall("demetra/maths/MatrixType","Ldemetra/maths/MatrixType;", "ofInternal", as.double(s), as.integer(sdim[1]), as.integer(sdim[2])))

@@ -3,8 +3,6 @@ source("./R files/jd3_tdvar.R")
 
 load("./Data/ABS.rda")
 
-load("./Data/ABS.rda")
-
 tdvar_all<-function(s, log=TRUE, td="TD7", var="Default",aicdiff=0){
   if (log){
     s<-log(s)
