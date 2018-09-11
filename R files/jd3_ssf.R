@@ -60,59 +60,51 @@ setMethod("add", signature = c(object="JD3_SsfModel", item = "JD3_SsfItem"), fun
   }
 })
 
-setMethod("estimate", signature = c(object="JD3_SsfModel"), function(object, data, marginal=FALSE){
+setMethod("estimate", signature = c(object="JD3_SsfModel"), function(object, data, precision=1e-15, marginal=FALSE){
   if ( is.jnull(object@internal) ){
     return(NULL)
   }else{
     jdata<-matrix_r2jd(data)
-    jrslt<-.jcall(object@internal, "Lrssf/CompositeModel$Estimation;", "estimate", jdata, marginal)
+    jrslt<-.jcall(object@internal, "Lrssf/CompositeModel$Estimation;", "estimate", jdata, precision, marginal)
     return( new(Class= "JD3_ProcResults", internal=jrslt))
   }
 })
 
-setMethod("add", signature = c(object="JD3_SsfEquation", item="character"), function(object, item, coeff=NULL, loading=NULL){
-  if ( is.jnull(object@internal))
-    return
-  if (is.null(coeff)){
-    if (is.null(loading))
-      .jcall(object@internal, "V", "add", item)
-    else
-      .jcall(object@internal, "V", "add", item, .jnull("java/lang/Double"), loading@internal)
-  }
-  else{
+setMethod("add", signature = c(object="JD3_SsfEquation", item="character"), function(object, item, coeff=1, fixed=TRUE, loading=NULL){
   if (is.null(loading))
-    .jcall(object@internal, "V", "add", item, .jnew("java/lang/Double", coeff),.jnull("demetra/ssf/ISsfLoading"))
+    .jcall(object@internal, "V", "add", item, coeff, as.logical(fixed), .jnull("demetra/ssf/ISsfLoading"))
   else
-    .jcall(object@internal, "V", "add", item, .jnew("java/lang/Double", coeff), loading@internal)
-  }
+    .jcall(object@internal, "V", "add", item, coeff, as.logical(fixed), loading@internal)
+  
 })
 
-jd3_ssf_ar<-function(name, nar, ar=NULL, variance=-1, nlags=0, fixed=FALSE){
-  jar=ar
-  if (is.null(jar)){
-    jar=.jnull("[D")
-  }
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "ar", name, as.integer(nar), jar, variance, as.integer(nlags), fixed)
+jd3_ssf_ar<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE, nlags=0){
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "ar", name, ar, fixedar, variance, fixedvariance, as.integer(nlags))
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
-jd3_ssf_locallevel<-function(name, levelVariance=-1){
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "localLevel", name, levelVariance)
+jd3_ssf_ar2<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE, nlags=0, nfcasts=0){
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "ar", name, ar, fixedar, variance, fixedvariance, as.integer(nlags), as.integer(nfcasts))
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
-jd3_ssf_locallineartrend<-function(name, levelVariance=-1, slopevariance=-1){
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "localLinearTrend", name, levelVariance, slopevariance)
+jd3_ssf_locallevel<-function(name, variance=.01, fixed=FALSE){
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "localLevel", name, variance, fixed)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
-jd3_ssf_seasonal<-function(name, period, type="Crude", seasVariance=-1){
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "seasonalComponent", name, type, as.integer(period), seasVariance)
+jd3_ssf_locallineartrend<-function(name, levelVariance=.01, slopevariance=.01, fixedLevelVariance=FALSE, fixedSlopeVariance=FALSE ){
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "localLinearTrend", name, levelVariance, slopevariance, fixedLevelVariance, fixedSlopeVariance)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
-jd3_ssf_noise<-function(name, nVariance=-1){
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "noise", name, nVariance)
+jd3_ssf_seasonal<-function(name, period, type="Crude", variance=.01, fixed=FALSE){
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "seasonalComponent", name, type, as.integer(period), variance, fixed)
+  new (Class = "JD3_SsfItem", internal = jrslt)
+}
+
+jd3_ssf_noise<-function(name, nVariance=.01, fixed=FALSE){
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "noise", name, nVariance, fixed)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
@@ -125,24 +117,33 @@ jd3_ssf_model<-function(){
   new (Class = "JD3_SsfModel", internal = jrslt)
 }
 
-jd3_ssf_equation<-function(name, variance=-1){
-  if (variance <0)
-    jrslt<-.jcall("rssf/ModelEquation", "Lrssf/ModelEquation;", "withError", name)
-  else
-    jrslt<-.jcall("rssf/ModelEquation", "Lrssf/ModelEquation;", "withFixedError", name, variance)
+jd3_ssf_equation<-function(name, variance=.01, fixed=FALSE){
+    jrslt<-.jnew("rssf/ModelEquation", name, variance, fixed)
   new (Class = "JD3_SsfEquation", internal = jrslt)
 }
 
-jd3_ssf_loading<-function(pos){
+jd3_ssf_loading<-function(pos=NULL, weights=NULL){
   if (is.null(pos)){
     jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "fromPosition", as.integer(0))
     return (new (Class = "JD3_SsfLoading", internal =jrslt))
   }
   else if (length(pos) == 1){
-    jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "fromPosition", as.integer(pos))
+     if (is.null(weights))
+      jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "fromPosition", as.integer(pos))
+    else{
+      if (length(pos) != length(weights))
+        return (NULL)
+      jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "from", as.integer(pos), weights[1])
+    }
     return (new (Class = "JD3_SsfLoading", internal =jrslt))
   }else{
-    jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "fromPositions", as.integer(pos))
+    if (is.null(weights))
+      jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "fromPositions", as.integer(pos))
+    else{
+    if (length(pos) != length(weights))
+      return (NULL)
+    jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "from", as.integer(pos), weights)
+    }
     return (new (Class = "JD3_SsfLoading", internal =jrslt))
   }
 }
