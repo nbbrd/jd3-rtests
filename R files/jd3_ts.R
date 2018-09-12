@@ -10,6 +10,12 @@ ts_r2jd<-function(s){
          as.integer(freq), as.integer(start[1]), as.integer(start[2]), as.double(s))
   }
 
+tsdomain_r2jd<-function(period, startYear, startPeriod, length){
+  .jcall("demetra/r/TsUtility", "Ldemetra/timeseries/TsDomain;", "of", 
+         as.integer(period), as.integer(startYear), as.integer(startPeriod), as.integer(length))
+}
+
+
 ts_jd2r<-function(s){
   if (is.null(s)){
     return (NULL)
@@ -32,10 +38,10 @@ matrix_jd2r<-function(s){
 
 matrix_r2jd<-function(s){
   if (!is.matrix(s)){
-    return (NULL)
+    s<-matrix(s, nrow=length(s), ncol=1)
   }
   sdim<-dim(s)
-  return (.jcall("demetra/maths/matrixType","Ldemetra/maths/matrixType;", "ofInternal", as.double(s), as.integer(sdim[1], as.integer(sdim[2])) ))
+  return (.jcall("demetra/maths/MatrixType","Ldemetra/maths/MatrixType;", "ofInternal", as.double(s), as.integer(sdim[1]), as.integer(sdim[2])))
 }
 
 jd3_aggregate<-function(s, nfreq=1, conversion="Sum", complete=TRUE){

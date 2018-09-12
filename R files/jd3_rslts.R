@@ -103,7 +103,8 @@ proc_reg<-function(rslt, name){
   desc<-.jfield(s, "S", "description")
   val<-.jfield(s, "D", "coefficient")
   e<-.jfield(s, "D", "stdError")
-  all<-c(val, e)
+  p<-.jfield(s, "D", "pValue")
+  all<-c(val, e, p)
   attr(all, "description")<-desc
   all
 }
