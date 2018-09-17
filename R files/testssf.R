@@ -180,3 +180,5 @@ lines(result(rslt4, paste("ssf.smoothing.array(",pos[7]+4, ")", sep="")), col="b
 lines(result(rslt4, paste("ssf.filtering.array(",pos[7]+4, ")", sep="")), col="magenta")
 
 print(result(rslt4, "parametersname"))
+print(result(rslt4, "scalingfactor"))
+
