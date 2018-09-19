@@ -79,12 +79,12 @@ setMethod("add", signature = c(object="JD3_SsfEquation", item="character"), func
 })
 
 jd3_ssf_ar<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE, nlags=0){
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "ar", name, ar, fixedar, variance, fixedvariance, as.integer(nlags))
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "ar", name, .jarray(ar), fixedar, variance, fixedvariance, as.integer(nlags))
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
 jd3_ssf_ar2<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE, nlags=0, nfcasts=0){
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "ar", name, ar, fixedar, variance, fixedvariance, as.integer(nlags), as.integer(nfcasts))
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "ar", name, .jarray(ar), fixedar, variance, fixedvariance, as.integer(nlags), as.integer(nfcasts))
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
