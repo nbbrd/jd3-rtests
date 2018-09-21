@@ -27,6 +27,25 @@ print(result(rslt, "parameters"))
 print(result(rslt, "loglikelihood"))
 
 # or
+bsmbis<-jd3_ssf_model()
+
+# create the components and add them to the model
+add(bsmbis, jd3_ssf_locallineartrend("ll", levelVariance = 1, fixedLevelVariance = TRUE))
+add(bsmbis, jd3_ssf_seasonal("s", 12, type="Crude", 1, TRUE))
+add(bsmbis, jd3_ssf_ar("ar", c(1,-.5), variance = 1, fixedvariance = TRUE))
+# create the equation (fix the variance to 1)
+eq<-jd3_ssf_equation("eq", variance=0, fixed = TRUE)
+add(eq, "ll", 1, TRUE)
+add(eq, "s", .1, FALSE)
+add(eq, "ar", .1, FALSE)
+add(bsmbis, eq)
+#estimate the model
+rsltbis<-estimate(bsmbis, s)
+print(result(rsltbis, "parameters"))
+print(result(rsltbis, "loglikelihood"))
+
+
+# or
 bsm2<-jd3_ssf_model()
 
 add(bsm2, jd3_ssf_locallineartrend("ll"))
@@ -56,7 +75,7 @@ add(model2, jd3_ssf_locallineartrend("tu", levelVariance = 0, fixedLevelVariance
 add(model2, jd3_ssf_locallineartrend("ty", levelVariance = 0, fixedLevelVariance = TRUE))
 add(model2, jd3_ssf_locallevel("tpicore"))
 add(model2, jd3_ssf_locallevel("tpi"))
-add(model2, jd3_ssf_ar("cycle", c(1, -.5), fixedar = FALSE, variance= 1,fixedvariance=TRUE, nlags= 5))
+add(model2, jd3_ssf_ar("cycle", c(1, -.5), fixedar = FALSE, variance= 1, fixedvariance=TRUE, nlags= 5))
 
 # create the equations 
 eq1<-jd3_ssf_equation("eq1", variance=1, fixed = TRUE)
@@ -65,7 +84,7 @@ add(eq1, "cycle", .1, FALSE)
 add(model2, eq1)
 eq2<-jd3_ssf_equation("eq2")
 add(eq2, "ty")
-add(eq2, "cycle", .1, FALSE)
+add(eq2, "cycle", 1, FALSE)
 add(model2, eq2)
 eq3<-jd3_ssf_equation("eq3")
 add(eq3, "tpicore")
@@ -78,7 +97,7 @@ add(model2, eq4)
 
 #estimate the model
 rslt2<-estimate(model2, mdata)
-dictionary(rslt2)
+#dictionary(rslt2)
 
 print(result(rslt2, "parameters"))
 print(result(rslt2, "loglikelihood"))
