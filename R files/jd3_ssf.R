@@ -48,6 +48,11 @@ setClass(
 )
 
 setClass(
+  Class="JD3_SsfMeasurement",
+  contains = "JD3_Object"
+)
+
+setClass(
   Class="JD3_SsfLoading",
   contains = "JD3_Object"
 )
@@ -148,4 +153,56 @@ jd3_ssf_loading<-function(pos=NULL, weights=NULL){
   }
 }
 
+jd3_ssf<-function(initialization, dynamics, measurement){
+  jrslt<-.jcall("rssf/Ssf", "Ldemetra/ssf/univariate/Issf;", "of", initialization@internal, dynamics@internal, measurement@internal)
+  new (Class = "JD3_Ssf", internal = jrslt)
+}
 
+jd3_ssf_arima<-function(ar, diff, ma, var=1){
+  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "arima", as.double(ar), as.double(diff), as.double(ma), var)
+  new (Class = "JD3_Ssf", internal = jrslt)
+}
+
+jd3_ssf_arma<-function(ar, ma, var=1){
+  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "arma", as.double(ar), as.double(ma), var)
+  new (Class = "JD3_Ssf", internal = jrslt)
+}
+
+jd3_ssf_sarima<-function(period, orders, seasonal, parameters){
+  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "sarima", as.integer(period), as.integer(orders), as.integer(seasonal), parameters)
+  new (Class = "JD3_Ssf", internal = jrslt)
+}
+
+jd3_ssf_reg<-function(ssf, x, var=0, mvar=NULL){
+  
+  if (is.null(mvar)){
+    if (var == 0)
+      jssf<-.jcall("rssf/RegressionModels", "Ldemetra/ssf/univariate/ISsf;", "fixed", ssf@internal, matrix_r2jd(x))
+    else
+      jssf<-.jcall("rssf/RegressionModels", "Ldemetra/ssf/univariate/ISsf;", "timeVarying", ssf@internal, matrix_r2jd(x), var)
+  }else{
+    jssf<-.jcall("rssf/RegressionModels", "Ldemetra/ssf/univariate/ISsf;", "timeVarying", ssf@internal, matrix_r2jd(x), matrix_r2jd(mvar))
+  }
+  return (new (Class = "JD3_Ssf", internal = jssf))
+}
+
+jd3_ssf_initialization<-function(stationaryVar, initialState=NULL, diffuseConstraints=NULL, Pi=NULL){
+  jp<-matrix_r2jd(stationaryVar)
+  if (is.null(diffuseConstraints) && is.null(Pi)){
+    if (is.null(initialState))
+      jstate=.jnull("[D")
+    else
+      jstate=.jarray(initialState)
+    jinit<-.jcall("rssf/Initialization", "Ldemetra/ssf/ISsfInitialization;", "of", jstate, jp)
+  }
+  else{
+    if (is.null(initialState))
+      jstate=.jnull("[D")
+    else
+      jstate=.jarray(initialState)
+    jb<-matrix_r2jd(diffuseConstraints)
+    jpi<-matrix_r2jd(Pi)
+    jinit<-.jcall("rssf/Initialization", "Ldemetra/ssf/ISsfInitialization;", "ofDiffuse", jstate, jp, jb, jpi)
+  }
+  return (new (Class = "JD3_SsfInitialization", internal = jinit))
+}
