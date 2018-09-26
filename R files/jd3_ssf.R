@@ -65,12 +65,15 @@ setMethod("add", signature = c(object="JD3_SsfModel", item = "JD3_SsfItem"), fun
   }
 })
 
-setMethod("estimate", signature = c(object="JD3_SsfModel"), function(object, data, precision=1e-15, marginal=FALSE, concentrated=TRUE){
+setMethod("estimate", signature = c(object="JD3_SsfModel"), function(object, data, precision=1e-15, marginal=FALSE, concentrated=TRUE, initialParameters=NULL){
   if ( is.jnull(object@internal) ){
     return(NULL)
   }else{
+    jparams<-.jnull("[D")
+    if (! is.null(initialParameters))
+      jparams<-.jarray(initialParameters)
     jdata<-matrix_r2jd(data)
-    jrslt<-.jcall(object@internal, "Lrssf/CompositeModel$Estimation;", "estimate", jdata, precision, marginal, concentrated)
+    jrslt<-.jcall(object@internal, "Lrssf/CompositeModel$Estimation;", "estimate", jdata, precision, marginal, concentrated, jparams)
     return( new(Class= "JD3_ProcResults", internal=jrslt))
   }
 })
