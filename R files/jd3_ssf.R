@@ -65,12 +65,25 @@ setMethod("add", signature = c(object="JD3_SsfModel", item = "JD3_SsfItem"), fun
   }
 })
 
-setMethod("estimate", signature = c(object="JD3_SsfModel"), function(object, data, precision=1e-15, marginal=FALSE){
+setMethod("estimate", signature = c(object="JD3_SsfModel"), function(object, data, precision=1e-15, marginal=FALSE, concentrated=TRUE, initialParameters=NULL){
+  if ( is.jnull(object@internal) ){
+    return(NULL)
+  }else{
+    jparams<-.jnull("[D")
+    if (! is.null(initialParameters))
+      jparams<-.jarray(initialParameters)
+    jdata<-matrix_r2jd(data)
+    jrslt<-.jcall(object@internal, "Lrssf/CompositeModel$Estimation;", "estimate", jdata, precision, marginal, concentrated, jparams)
+    return( new(Class= "JD3_ProcResults", internal=jrslt))
+  }
+})
+
+setMethod("compute", signature = c(object="JD3_SsfModel"), function(object, data, parameters, marginal=FALSE, concentrated=TRUE){
   if ( is.jnull(object@internal) ){
     return(NULL)
   }else{
     jdata<-matrix_r2jd(data)
-    jrslt<-.jcall(object@internal, "Lrssf/CompositeModel$Estimation;", "estimate", jdata, precision, marginal)
+    jrslt<-.jcall(object@internal, "Lrssf/CompositeModel$Estimation;", "compute", jdata, .jarray(parameters), marginal, concentrated)
     return( new(Class= "JD3_ProcResults", internal=jrslt))
   }
 })
@@ -108,8 +121,8 @@ jd3_ssf_seasonal<-function(name, period, type="Crude", variance=.01, fixed=FALSE
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
-jd3_ssf_noise<-function(name, nVariance=.01, fixed=FALSE){
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "noise", name, nVariance, fixed)
+jd3_ssf_noise<-function(name, variance=.01, fixed=FALSE){
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "noise", name, variance, fixed)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
