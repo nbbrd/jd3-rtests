@@ -220,7 +220,7 @@ jd3_ssf_td<-function(name, period, start, length, groups=c(1,2,3,4,5,6,0), contr
 
 jd3_ssf_rawtd<-function(name, period, start, length, groups=c(1,2,3,4,5,6,0), variances, fixed=FALSE){
   jdomain<-tsdomain_r2jd(period, startYear = start[1], startPeriod = start[2], length = length)
-  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "rawTdRegression", name, jdomain, as.integer(groups), variances, fixed)
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "rawTdRegression", name, jdomain, as.integer(groups), .jarray(variances), fixed)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 

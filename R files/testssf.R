@@ -6,7 +6,7 @@ source("./R files/jd3_utility.R")
 
 ### Multivariate model 
 a<-read.table("./Data/bematrix.txt", sep='\t')
-a<-scale(a)
+#a<-scale(a)
 
 ### normalize a. The results are much more stable
 
@@ -102,6 +102,8 @@ lines(result(rslt3, "ssf.smoothing.cmp(6)"), col="red")
 
 # create the model X
 mdatax<-cbind(a[,1], a[,10], a[,3], a[,4], a[,6], a[,7])
+
+for (k in 60:nrow(mdatax)){
 model4<-jd3_ssf_model()
 
 # create the components and add them to the model
@@ -139,7 +141,20 @@ add(eq6, "cycle", .1, FALSE, jd3_ssf_loading(c(5,6,7,8), c(1,1,1,1)))
 add(model4, eq6)
 
 #estimate the model
-rslt4<-estimate(model4, mdatax, marginal=FALSE, concentrated=TRUE)
+if (is.null(p)){
+rslt4<-estimate(model4, mdatax[1:k,], marginal=FALSE, concentrated=TRUE)
+p<-result(rslt4, "parameters")
+}else{
+  rslt4<-estimate(model4, mdatax[1:k,], marginal=FALSE, concentrated=TRUE, initialParameters=p)
+  p<-result(rslt4, "parameters")
+}
+
+if (k==60)
+  plot(result(rslt4, "ssf.smoothing.cmp(1)"), type="l", xlim=c(0, 95), ylim=c(11.1, 11.6))
+else
+  lines(result(rslt4, "ssf.smoothing.cmp(1)"), col="blue")
+
+}
 
 print(result(rslt4, "parameters"))
 print(result(rslt4, "loglikelihood"))
@@ -148,7 +163,6 @@ factor=sqrt(result(rslt4, "scalingfactor"))
 print(result(rslt4, "parametersname"))
 print(factor)
 
-lines(result(rslt4, paste("ssf.smoothing.array(",pos[7]+4, ")", sep="")), col="blue")
 lines(result(rslt4, paste("ssf.filtering.array(",pos[7]+4, ")", sep="")), col="magenta")
 
 
@@ -161,3 +175,5 @@ plotcmp<-function(rslts, cmp){
   lines(v+2*ev, col="red")
   lines(v-2*ev, col="red")
 }
+
+
