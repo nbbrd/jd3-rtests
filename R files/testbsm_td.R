@@ -8,10 +8,9 @@ load("./Data/ABS.rda")
 
 s<-ABS$X0.2.20.10.M
 
-# create the model
 bsm_td<-function(s, tdgroups, contrast = FALSE){
+  # create the model
   bsm<-jd3_ssf_model()
-  
   # create the components and add them to the model
   add(bsm, jd3_ssf_locallineartrend("ll"))
   add(bsm, jd3_ssf_seasonal("s", 12, type="Crude"))

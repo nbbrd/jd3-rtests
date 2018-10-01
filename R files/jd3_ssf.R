@@ -221,7 +221,7 @@ jd3_ssf_reg<-function(ssf, x, var=0, mvar=NULL){
   return (new (Class = "JD3_Ssf", internal = jssf))
 }
 
-jd3_ssf_td<-function(name, period, start, length, groups=c(1,2,3,4,5,6,0), contrast=TRUE, variance, fixed=FALSE){
+jd3_ssf_td<-function(name, period, start, length, groups=c(1,2,3,4,5,6,0), contrast=TRUE, variance=0.01, fixed=FALSE){
   jdomain<-tsdomain_r2jd(period, startYear = start[1], startPeriod = start[2], length = length)
   jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "tdRegression", name, jdomain, as.integer(groups), contrast, variance, fixed)
   new (Class = "JD3_SsfItem", internal = jrslt)
