@@ -31,3 +31,16 @@ bsm_td_periodic<-function(s, tdgroups, period, noisyperiod, contrast = FALSE){
   rslt<-estimate(bsm, s, 1e-20, marginal=TRUE, concentrated=TRUE)
   return(rslt)
 }
+
+q<-bsm_td_periodic(log(retail$BookStores), c(1,1,1,1,2,3,0),12,c(1,7,8))
+ss<-result(q, "ssf.smoothing.states")
+
+plot(ss[,17]+ss[,18]+ss[,19]+ss[,20], type="l")
+z<-ss[,18]+ss[,19]+ss[,20]
+z<-sapply(z, function(x){if (abs(x)==0)return(NA)else return(x)})
+points(z, col="red", pch=16)
+
+
+
+
+
