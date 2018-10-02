@@ -41,3 +41,11 @@ add(bsm2, eq2)
 rslt2<-estimate(bsm2, log(s), marginal=TRUE)
 print(result(rslt2, "loglikelihood"))
 print(result(rslt2, "parameters"))
+
+#result(rslt, "ssf.P0")
+#result(rslt, "ssf.T")
+
+#fs<-result(rslt, "ssf.filtering.states")
+#ss<-result(rslt, "ssf.smoothing.states")
+#plot(fs[,1], type='l')
+#lines(ss[,1], col="blue")
