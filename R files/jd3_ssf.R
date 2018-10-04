@@ -166,6 +166,24 @@ jd3_ssf_loading<-function(pos=NULL, weights=NULL){
   }
 }
 
+jd3_ssf_loading_sum<-function(length=0){
+  if (length == 0)
+    jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "sum")
+  else
+    jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "createPartialSum", as.integer(length))
+  return (new (Class = "JD3_SsfLoading", internal =jrslt))
+}
+
+jd3_ssf_loading_cyclical<-function(period, startpos){
+  jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "cyclical", as.integer(period), as.integer(startpos-1))
+  return (new (Class = "JD3_SsfLoading", internal =jrslt))
+}
+
+jd3_ssf_loading_periodic<-function(period, startpos){
+  jrslt<-.jcall("demetra/ssf/implementations/Loading", "Ldemetra/ssf/ISsfLoading;", "periodic", as.integer(period), as.integer(startpos-1))
+  return (new (Class = "JD3_SsfLoading", internal =jrslt))
+}
+
 jd3_ssf<-function(initialization, dynamics, measurement){
   jrslt<-.jcall("rssf/Ssf", "Ldemetra/ssf/univariate/Issf;", "of", initialization@internal, dynamics@internal, measurement@internal)
   new (Class = "JD3_Ssf", internal = jrslt)
@@ -181,9 +199,13 @@ jd3_ssf_arma<-function(ar, ma, var=1){
   new (Class = "JD3_Ssf", internal = jrslt)
 }
 
-jd3_ssf_sarima<-function(period, orders, seasonal, parameters){
-  jrslt<-.jcall("rssf/AtomicModels", "Ldemetra/ssf/univariate/ISsf;", "sarima", as.integer(period), as.integer(orders), as.integer(seasonal), parameters)
-  new (Class = "JD3_Ssf", internal = jrslt)
+jd3_ssf_sarima<-function(name, period, orders, seasonal, parameters=NULL){
+  if (is.null(parameters))
+    jp<-.jnull("[D")
+  else
+    jp<-.jarray(parameters)
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "sarima", name, as.integer(period), as.integer(orders), as.integer(seasonal), jp)
+  new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
 jd3_ssf_reg<-function(ssf, x, var=0, mvar=NULL){
@@ -197,6 +219,18 @@ jd3_ssf_reg<-function(ssf, x, var=0, mvar=NULL){
     jssf<-.jcall("rssf/RegressionModels", "Ldemetra/ssf/univariate/ISsf;", "timeVarying", ssf@internal, matrix_r2jd(x), matrix_r2jd(mvar))
   }
   return (new (Class = "JD3_Ssf", internal = jssf))
+}
+
+jd3_ssf_td<-function(name, period, start, length, groups=c(1,2,3,4,5,6,0), contrast=TRUE, variance=0.01, fixed=FALSE){
+  jdomain<-tsdomain_r2jd(period, startYear = start[1], startPeriod = start[2], length = length)
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "tdRegression", name, jdomain, as.integer(groups), contrast, variance, fixed)
+  new (Class = "JD3_SsfItem", internal = jrslt)
+}
+
+jd3_ssf_rawtd<-function(name, period, start, length, groups=c(1,2,3,4,5,6,0), variances, fixed=FALSE){
+  jdomain<-tsdomain_r2jd(period, startYear = start[1], startPeriod = start[2], length = length)
+  jrslt<-.jcall("rssf/AtomicModels", "Lrssf/ModelItem;", "rawTdRegression", name, jdomain, as.integer(groups), .jarray(variances), fixed)
+  new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
 jd3_ssf_initialization<-function(stationaryVar, initialState=NULL, diffuseConstraints=NULL, Pi=NULL){
