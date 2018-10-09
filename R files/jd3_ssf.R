@@ -106,8 +106,8 @@ jd3_ssf_ar2<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
-jd3_ssf_nar<-function(name, ar, fixed=FALSE, nlags=0, lag=1, zeroinit=FALSE){
-  jrslt<-.jcall("demetra/msts/AtomicModels", "Ldemetra/msts/ModelItem;", "nar", name, .jarray(ar), fixed, as.integer(nlags), as.integer(lag), zeroinit)
+jd3_ssf_sae<-function(name, ar, fixedar=FALSE, variance=1, fixedvariance=TRUE, lag=1, zeroinit=FALSE){
+  jrslt<-.jcall("demetra/msts/AtomicModels", "Ldemetra/msts/ModelItem;", "sea", name, .jarray(ar), fixedar, variance, fixedvariance, as.integer(lag), zeroinit)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 

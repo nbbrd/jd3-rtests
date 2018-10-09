@@ -1,7 +1,5 @@
 source("./R files/jd3_init.R")
 source("./R files/jd3_ssf.R")
-source("./R files/jd3_utility.R")
-
 
 load("./Data/retail.rda")
 load("./Data/ABS.rda")
