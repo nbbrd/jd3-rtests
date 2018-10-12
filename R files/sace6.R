@@ -67,3 +67,6 @@ s<-result(b1,"s")
 i<-result(b1,"i")
 stldecomp<-cbind(y,t,sa,w,s,i)
 
+plot(x11decomp[3000:3070, "w"], type="l")
+lines(exp(seatsdecomp[3000:3070, "w"]), col="red")
+lines(stldecomp[3000:3070, "w"], col="blue")
