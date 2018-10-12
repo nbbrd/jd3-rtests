@@ -96,8 +96,8 @@ setMethod("add", signature = c(object="JD3_SsfEquation", item="character"), func
   
 })
 
-jd3_ssf_ar<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE, nlags=0){
-  jrslt<-.jcall("demetra/msts/AtomicModels", "Ldemetra/msts/ModelItem;", "ar", name, .jarray(ar), fixedar, variance, fixedvariance, as.integer(nlags))
+jd3_ssf_ar<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE, nlags=0, zeroinit=FALSE){
+  jrslt<-.jcall("demetra/msts/AtomicModels", "Ldemetra/msts/ModelItem;", "ar", name, .jarray(ar), fixedar, variance, fixedvariance, as.integer(nlags), zeroinit)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
@@ -107,7 +107,7 @@ jd3_ssf_ar2<-function(name, ar, fixedar=FALSE, variance=.01, fixedvariance=FALSE
 }
 
 jd3_ssf_sae<-function(name, ar, fixedar=FALSE, variance=1, fixedvariance=TRUE, lag=1, zeroinit=FALSE){
-  jrslt<-.jcall("demetra/msts/AtomicModels", "Ldemetra/msts/ModelItem;", "sea", name, .jarray(ar), fixedar, variance, fixedvariance, as.integer(lag), zeroinit)
+  jrslt<-.jcall("demetra/msts/AtomicModels", "Ldemetra/msts/ModelItem;", "sae", name, .jarray(ar), fixedar, variance, fixedvariance, as.integer(lag), zeroinit)
   new (Class = "JD3_SsfItem", internal = jrslt)
 }
 
