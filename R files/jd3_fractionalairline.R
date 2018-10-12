@@ -53,3 +53,18 @@ jd3_fractionalAirlineDecomposition<-function(y, period, adjust=TRUE){
   jrslt<-.jcall("demetra/r/FractionalAirlineDecomposition", "Ldemetra/r/FractionalAirlineDecomposition$Results;", "process", as.numeric(y), period, adjust)
   new (Class = "JD3_FractionalAirlineDecomposition", internal = jrslt)
 }
+
+setClass(
+  Class="JD3_PeriodicAirline",
+  contains = "JD3_ProcResults"
+)
+
+jd3_periodicAirline<-function(y, periods, x = NULL, mean = FALSE, outliers=NULL, criticalValue=6){
+  if (is.null(outliers))
+    joutliers<-.jnull("[S")
+  else
+    joutliers=.jarray(outliers, "java.lang.String")
+  jrslt<-.jcall("demetra/r/PeriodicAirline", "Ldemetra/r/PeriodicAirline$Results;", "process", as.numeric(y), matrix_r2jd(x), mean, .jarray(periods), joutliers
+                , criticalValue)
+  new (Class = "JD3_FractionalAirlineDecomposition", internal = jrslt)
+}

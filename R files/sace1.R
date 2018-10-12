@@ -55,6 +55,9 @@ add(airline, eq)
 arslt<-estimate(airline, log(s), marginal=TRUE, concentrated=TRUE)
 ass<-result(arslt, "ssf.smoothing.states")
 plot(-(4*ass[,15]+ass[,16]+ass[,17]), type="l", ylim=c(-0.035,0))
+arslt<-estimate(airline, log(s), marginal=TRUE, concentrated=TRUE)
+afs<-result(arslt, "ssf.filtering.states")
+lines(-(4*afs[,15]+afs[,16]+afs[,17]), type="l", ylim=c(-0.035,0), col="red")
 
 
 
