@@ -59,6 +59,6 @@ jd3_airlineDecomposition<-function(y){
     stop("y must be a time series")
   }
   
-  jrslt<-.jcall("demetra/r/AirlineDecomposition", "Ldemetra/r/AirlineDecomposition$Results;", "process", ts_r2jd(y))
+  jrslt<-.jcall("demetra/r/AirlineDecomposition", "Ldemetra/r/AirlineDecomposition$Results;", "process", ts_r2jd(y), F)
   new (Class = "JD3_AirlineDecomposition", internal = jrslt)
 }
