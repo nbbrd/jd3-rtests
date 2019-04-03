@@ -17,12 +17,12 @@ setMethod("add", signature = c(object="JD3_Holidays"), function(object, item, of
     return (FALSE)
   }else{
     if (is.character(item)){
-      ok<-.jcall("demetra/r/TsUtility", "Z", "add", object@internal, item, as.integer(offset), weight, !gregorian)
+      ok<-.jcall(object@internal, "Z", "add", item, as.integer(offset), weight, !gregorian)
        return (ok)
     }else if (is.numeric(item)){
       if (length(item)!= 2)
         return (FALSE)
-      ok<-.jcall("demetra/r/TsUtility", "Z", "addFixedDay", object@internal, as.integer(item[1]), as.integer(item[2]),
+      ok<-.jcall(object@internal, "Z", "addFixedDay", as.integer(item[1]), as.integer(item[2]),
              weight, !gregorian)
       return (ok)
     }else
@@ -31,13 +31,13 @@ setMethod("add", signature = c(object="JD3_Holidays"), function(object, item, of
 })
 
 jd3_holidays<-function(){
-  jrslt<-.jnew("demetra/timeseries/calendars/Holidays")
+  jrslt<-.jnew("demetra/calendar/r/Holidays")
   new (Class = "JD3_Holidays", internal = jrslt)
 }
 
 jd3_holidaysMatrix<-function(holidays, startingDate, length, type=c("Default", "SkipSundays", "NextWorkingDay", "PreviousWorkingDay")){
   type=match.arg(type)
-  jm<-.jcall("demetra/r/TsUtility", "Ldemetra/maths/MatrixType;", "holidays", holidays@internal, startingDate, as.integer(length), type)
+  jm<-.jcall(holidays@internal, "Ldemetra/maths/MatrixType;", "holidays", startingDate, as.integer(length), type)
   return (matrix_jd2r(jm))
 }
 

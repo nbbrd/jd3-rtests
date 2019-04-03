@@ -49,8 +49,8 @@ setMethod("saDecomposition", "JD3_FractionalAirlineDecomposition", function(obje
 })
 
 
-jd3_fractionalAirlineDecomposition<-function(y, period, adjust=TRUE){
-  jrslt<-.jcall("demetra/r/FractionalAirlineDecomposition", "Ldemetra/r/FractionalAirlineDecomposition$Results;", "process", as.numeric(y), period, adjust)
+jd3_fractionalAirlineDecomposition<-function(y, period, adjust=TRUE, sn=F){
+  jrslt<-.jcall("demetra/r/FractionalAirlineDecomposition", "Ldemetra/r/FractionalAirlineDecomposition$Results;", "process", as.numeric(y), period, adjust, sn)
   new (Class = "JD3_FractionalAirlineDecomposition", internal = jrslt)
 }
 
