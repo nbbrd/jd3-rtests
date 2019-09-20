@@ -26,3 +26,5 @@ lp_endpoints<-function(s, horizon, kernel="Henderson", ic=4.5){
   lines(H[(l-2*q):(l-horizon)],col="magenta")
   cbind(h,daf, lc,ql,cq)[(l-2*q):(l-horizon),]
 }
+
+lp_endpoints(ABS$X0.2.09.10.M, horizon = 11)

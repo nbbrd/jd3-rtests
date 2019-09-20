@@ -27,15 +27,15 @@ for (i in 1:100){
   bsm<-jd3_ssf_model()
 
   # create the components and add them to the model
-  add(bsm, jd3_ssf_locallineartrend("ll"))
-  add(bsm, jd3_ssf_seasonal("s", 12, type="Crude"))
+  ssf.add(bsm, jd3_ssf_locallineartrend("ll"))
+  ssf.add(bsm, jd3_ssf_seasonal("s", 12, type="Crude"))
   # create the equation (fix the variance to 1)
   eq<-jd3_ssf_equation("eq", 1, TRUE)
-  add(eq, "ll")
-  add(eq, "s")
-  add(bsm, eq)
+  ssf.add(eq, "ll")
+  ssf.add(eq, "s")
+  ssf.add(bsm, eq)
   #estimate the model
-  rslt<-estimate(bsm, ABS$X0.2.20.10.M, 1e-20, marginal=FALSE, concentrated=TRUE)
+  rslt<-ssf.estimate(bsm, ABS$X0.2.20.10.M, marginal=FALSE, concentrated=TRUE)
 }
 
 

@@ -11,5 +11,5 @@ denton_add<-jd3_denton(retail$RetailSalesTotalExclMotorVehicle, y, mul = FALSE)
 cholette_mul<-jd3_cholette(retail$RetailSalesTotalExclMotorVehicle, y)
 cholette_add<-jd3_cholette(retail$RetailSalesTotalExclMotorVehicle, y, rho=1, lambda = 0)
 
-summary(denton_mul-cholette_mul)
-summary(denton_add-cholette_add)
+print(summary(denton_mul-cholette_mul))
+print(summary(denton_add-cholette_add))

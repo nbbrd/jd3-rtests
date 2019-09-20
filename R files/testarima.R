@@ -28,7 +28,7 @@ for (i in 1:20){
 
 # Stop the clock
 message("JD3 ([3 1 1][0 1 1])")
-proc.time() - ptm
+print(proc.time() - ptm)
 
 # Start the clock!
 ptm <- proc.time()
@@ -40,7 +40,7 @@ for (i in 1:20){
 
 # Stop the clock
 message("R-Arima ([3 1 1][0 1 1])")
-proc.time() - ptm
+print(proc.time() - ptm)
 
 ptm <- proc.time()
 # Loop 
@@ -50,7 +50,7 @@ for (i in 1:20){
 
 # Stop the clock
 message("JD3 (airline)")
-proc.time() - ptm
+print(proc.time() - ptm)
 
 # Start the clock!
 ptm <- proc.time()
@@ -62,7 +62,7 @@ for (i in 1:20){
 
 # Stop the clock
 message("R-Arima (airline)")
-proc.time() - ptm
+print(proc.time() - ptm)
 
 a<-retail$BookStores
 a[10]<-NaN
@@ -76,7 +76,7 @@ for (i in 1:100){
 
 # Stop the clock
 message("JD3 (airline) with missings")
-proc.time() - ptm
+print(proc.time() - ptm)
 
 # Start the clock!
 ptm <- proc.time()
@@ -88,7 +88,7 @@ for (i in 1:100){
 
 # Stop the clock
 message("R-Arima (airline) with missings")
-proc.time() - ptm
+print(proc.time() - ptm)
 
 logLik( jd3_arima(a , order=c(0,1,1), seasonal=c(0,1,1) ))
 coef( jd3_arima(a , order=c(3,1,1), seasonal=c(1,1,0) ))
