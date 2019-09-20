@@ -23,7 +23,7 @@ setMethod("predict", "JD3_Arima", function(object, nforecasts=0, nbackcasts=0, m
   }else{
     method=match.arg(method)
     mean<-proc_numeric(object@internal, "mean")
-    jregarima<-.jcall(object@internal, "Ldemetra/regarima/RegArimaModel;", "getRegarima")
+    jregarima<-.jcall(object@internal, "Ljdplus/regarima/RegArimaModel;", "getRegarima")
     jrslt<-.jcall("demetra/r/ArimaForecasts", "Ldemetra/r/ArimaForecasts$Results;", "process", jregarima, mean, as.integer(nforecasts), as.integer(nbackcasts), method)
     return (new (Class = "JD3_ArimaPredict", internal = jrslt))
   }

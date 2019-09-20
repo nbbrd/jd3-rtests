@@ -21,7 +21,7 @@ ts_jd2r<-function(s){
     return (NULL)
   }
   pstart<-.jcall("demetra/r/TsUtility", "[I", "startPeriod", s)
-  jx<-.jcall(s, "Ldemetra/data/DoubleSequence;", "getValues")
+  jx<-.jcall(s, "Ldemetra/data/DoubleSeq;", "getValues")
   x<-.jcall(jx, "[D", "toArray")
   ts(x,start=pstart[2:3], frequency=pstart[1])
 }
@@ -38,12 +38,12 @@ matrix_jd2r<-function(s){
 
 matrix_r2jd<-function(s){
   if (is.null(s))
-    return (.jnull("demetra/maths/MatrixType"))
+    return (.jnull("demetra/maths/matrices/Matrix"))
   if (!is.matrix(s)){
     s<-matrix(s, nrow=length(s), ncol=1)
   }
   sdim<-dim(s)
-  return (.jcall("demetra/maths/MatrixType","Ldemetra/maths/MatrixType;", "ofInternal", as.double(s), as.integer(sdim[1]), as.integer(sdim[2])))
+  return (.jcall("demetra/maths/matrices/Matrix","Ldemetra/maths/matrices/Matrix;", "ofInternal", as.double(s), as.integer(sdim[1]), as.integer(sdim[2])))
 }
 
 jd3_aggregate<-function(s, nfreq=1, conversion="Sum", complete=TRUE){
