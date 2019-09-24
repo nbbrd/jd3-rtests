@@ -37,7 +37,7 @@ jd3_holidays<-function(){
 
 jd3_holidaysMatrix<-function(holidays, startingDate, length, type=c("Default", "SkipSundays", "NextWorkingDay", "PreviousWorkingDay")){
   type=match.arg(type)
-  jm<-.jcall(holidays@internal, "Ldemetra/maths/MatrixType;", "holidays", startingDate, as.integer(length), type)
+  jm<-.jcall(holidays@internal, "Ldemetra/maths/matrices/Matrix;", "holidays", startingDate, as.integer(length), type)
   return (matrix_jd2r(jm))
 }
 

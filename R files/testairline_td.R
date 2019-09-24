@@ -13,15 +13,15 @@ airline_td<-function(s, tdgroups, contrast = FALSE){
   air<-jd3_ssf_model()
   
   # create the components and add them to the model
-  add(air, jd3_ssf_sarima("airline", 12, c(0,1,1), c(0,1,1)))
-  add(air, jd3_ssf_td("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = .0001, fixed=FALSE))
+  ssf.add(air, jd3_ssf_sarima("airline", 12, c(0,1,1), c(0,1,1)))
+  ssf.add(air, jd3_ssf_td("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = .0001, fixed=FALSE))
   # create the equation (fix the variance to 1)
   eq<-jd3_ssf_equation("eq", 0, TRUE)
-  add(eq, "airline")
-  add(eq, "td")
+  ssf.add(eq, "airline")
+  ssf.add(eq, "td")
   #estimate the model
-  add(air, eq)
-  rslt<-estimate(air, s, 1e-20, marginal=TRUE, concentrated=TRUE)
+  ssf.add(air, eq)
+  rslt<-ssf.estimate(air, s, marginal=TRUE, concentrated=TRUE)
   return(rslt)
 }
 
@@ -29,15 +29,15 @@ airline_td_fixed<-function(s, tdgroups){
   air<-jd3_ssf_model()
   
   # create the components and add them to the model
-  add(air, jd3_ssf_sarima("airline", 12, c(0,1,1), c(0,1,1)))
+  ssf.add(air, jd3_ssf_sarima("airline", 12, c(0,1,1), c(0,1,1)))
   add(air, jd3_ssf_td("td", frequency(s), start(s), length(s), tdgroups, FALSE, variance = 0, fixed=TRUE))
   # create the equation (fix the variance to 1)
   eq<-jd3_ssf_equation("eq", 0, TRUE)
-  add(eq, "airline")
-  add(eq, "td")
+  ssf.add(eq, "airline")
+  ssf.add(eq, "td")
   #estimate the model
-  add(air, eq)
-  rslt<-estimate(air, s, 1e-20, marginal=TRUE, concentrated=TRUE)
+  ssf.add(air, eq)
+  rslt<-ssf.estimate(air, s, 1e-20, marginal=TRUE, concentrated=TRUE)
   return(rslt)
 }
 
