@@ -15,9 +15,9 @@ y<-DM2013to2018[,4]
 #mstl(NSW_DMSales, lambda='auto') %>% autoplot(facet=TRUE)
 ###############################################################################
 
-m1<-jd3_x11(y, 365.25/7, trendLength=53, seas0="S3X1",seas1="S3X3")
+m1<-jd3_x11(y, 365.25/7, trend.horizon=26, seas.s0="S3X1",seas.s1="S3X3")
 fsa1<-saDecomposition(m1)
-m2<-jd3_x11(y, 52, trendLength=53, seas0="S3X1",seas1="S3X3")
+m2<-jd3_x11(y, 52, trend.horizon=26, seas.s0="S3X1",seas.s1="S3X3")
 
 
 fsa2<-saDecomposition(m2)

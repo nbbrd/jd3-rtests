@@ -45,8 +45,8 @@ seatsdecomp<-cbind(y,t,sa,w,s,i)
 
 y<-exp(y)
 # sa of daily series with X11
-a<-jd3_x11(y, period=7, multiplicative = TRUE, seas0="S3X15", seas1="S3X15", trendLength = 9)
-a1<-jd3_x11(result(a,"d11"), period=365.25, multiplicative = TRUE, trendLength = 367)
+a<-jd3_x11(y, period=7, mul = TRUE, seas.s0="S3X15", seas.s1="S3X15", trend.horizon=4)
+a1<-jd3_x11(result(a,"d11"), period=365.25, mul = TRUE, trend.horizon=183)
 
 # The final decomposition is given by
 w<-result(a,"d10")

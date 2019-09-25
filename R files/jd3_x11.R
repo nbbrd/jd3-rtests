@@ -38,25 +38,28 @@ setMethod("saDecomposition", "JD3_X11", function(object){
 })
 
 
-jd3_x11<-function(y, period, multiplicative=TRUE, trendLength=13, trendDegree=3,
-                  trendKernel="Henderson", asymmetric="MMSRE",
-                  seas0=c("S3X3", "S3X1", "S3X5", "S3X9", "S3X15"),
-                  seas1=c("S3X3", "S3X1", "S3X5", "S3X9", "S3X15"), 
-                  lsigma=1.5, usigma=2.5){
-  seas0=match.arg(seas0)
-  seas1=match.arg(seas1)
-  jrslt<-.jcall("demetra/r/X11Decomposition", "Ldemetra/r/X11Decomposition$Results;", "process", as.numeric(y), period, multiplicative
-                , as.integer(trendLength), as.integer(trendDegree),
-                trendKernel, asymmetric, seas0, seas1, lsigma, usigma)
-  new (Class = "JD3_X11", internal = jrslt)
+jd3_x11<-function(y, period, mul=TRUE, trend.horizon=6, trend.degree=2,
+                  trend.kernel=c("Henderson", "BiWeight", "TriWeight", "TriCube", "Uniform", "Triangular", "Epanechnikov", "Trapezoidal"),
+                  trend.asymmetric=c("CutAndNormalize", "Direct", "MMSRE"),
+                  seas.s0=c("S3X3", "S3X1", "S3X5", "S3X9", "S3X15"),
+                  seas.s1=c("S3X5", "S3X3", "S3X1", "S3X9", "S3X15"),
+                  extreme.lsig=1.5, extreme.usig=2.5){
+  seas0=match.arg(seas.s0)
+  seas1=match.arg(seas.s1)
+  tkernel=match.arg(trend.kernel)
+  asym=match.arg(trend.asymmetric)
+  jrslt<-.jcall("demetra/saexperimental/r/X11Decomposition", "Ldemetra/saexperimental/r/X11Decomposition$Results;", "process", as.numeric(y), period, mul
+                , as.integer(trend.horizon), as.integer(trend.degree),
+                tkernel, asym, seas0, seas1, extreme.lsig, extreme.usig)
+  return (new (Class = "JD3_X11", internal = jrslt))
 }
 
 jd3_henderson<-function(y, length, musgrave=TRUE, ic=4.5){
-  return (.jcall("demetra/r/X11Decomposition", "[D", "henderson", as.numeric(y), as.integer(length), musgrave, ic))
+  return (.jcall("demetra/saexperimental/r/X11Decomposition", "[D", "henderson", as.numeric(y), as.integer(length), musgrave, ic))
 }
 
 jd3_icratios<-function(y, t, nlags, multiplicative=TRUE){
-  return (.jcall("demetra/r/X11Decomposition", "[D", "icratios", as.numeric(y), as.numeric(t), as.integer(nlags), multiplicative))
+  return (.jcall("demetra/saexperimental/r/X11Decomposition", "[D", "icratios", as.numeric(y), as.numeric(t), as.integer(nlags), multiplicative))
 }
 
 # See Proietti-Luati [2008] (Real time estimation in local polynomial regression...) for the terminology
@@ -64,6 +67,6 @@ jd3_localpolynomials<-function(y, horizon, degree=3, kernel=c("Henderson", "Unif
   d<-2/(sqrt(pi)*ic)
   kernel=match.arg(kernel)
   endpoints=match.arg(endpoints)
-  return (.jcall("demetra/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints, d))
+  return (.jcall("demetra/saexperimental/r/LocalPolynomialFilters", "[D", "filter", as.numeric(y), as.integer(horizon), as.integer(degree), kernel, endpoints, d))
 }
 

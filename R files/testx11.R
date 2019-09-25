@@ -6,7 +6,7 @@ uspetroleum<-read.table("./Data/uspetroleum.txt")
 
 y<-uspetroleum[,2]
 
-m1<-jd3_x11(y, 365.25/7,seas1="S3X15")
+m1<-jd3_x11(y, 365.25/7,seas.s1="S3X15")
 fsa1<-saDecomposition(m1)
 m2<-jd3_x11(y, 52)
 fsa2<-saDecomposition(m2)
