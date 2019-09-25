@@ -26,6 +26,7 @@ library("rJava")
 .jaddClassPath("./Java/demetra-sa-core-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-sa-experimental-api-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-sa-experimental-core-1.0.0-SNAPSHOT.jar")
+.jaddClassPath("./Java/demetra-sa-experimental-r-1.0.0-SNAPSHOT.jar")
 .jaddClassPath("./Java/demetra-r-1.0.0-SNAPSHOT.jar")
 
 jd_clobj<-.jcall("java/lang/Class", "Ljava/lang/Class;", "forName", "java.lang.Object")
