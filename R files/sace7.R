@@ -25,7 +25,7 @@ add(jhol, c(7,14))
 add(jhol, c(11,11))
 
 hol<-jd3_holidaysMatrix(jhol, "1996-01-01", length = length(y), type = "Default")
-d<-jd3_periodicAirline(y, x=hol, periods=c(7, 365.25), outliers=c("ao", "ls", "wo"), criticalValue = 6)
+d<-jd3_periodicAirline(y, x=hol, periods=c(7, 365.25), outliers=c("ao", "ls","wo"), criticalValue = 6)
 
 print(result(d,"parameters"))
 print(result(d,"outliers"))
